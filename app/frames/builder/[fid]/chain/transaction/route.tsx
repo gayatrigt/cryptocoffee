@@ -50,14 +50,19 @@ const handleRequest = async (
       };
     }
 
-    const amount = parseFloat(ctx.searchParams.amount);
+
+    const amount = ctx.searchParams.amount;
+    const customAmount = ctx.searchParams.customAmount
+    const input = ctx.message?.inputText || ''
+
+    const selectedAmount = customAmount ? parseInt(input) : parseInt(amount)
+
     const chain = ctx.searchParams.chain;
-    console.log("🚀 ~ returnawaitframes ~ chain:", chain)
 
     let coffee = 0;
     let displayAmt = ""
 
-    if (isNaN(amount)) {
+    if (isNaN(selectedAmount)) {
       throw new Error('Invalid amount value'); // or handle the error as needed
     }
 
@@ -65,14 +70,14 @@ const handleRequest = async (
 
     console.log("🚀 ~ returnawaitframes ~ chain == DEGEN:", chain == "DEGEN")
     if (chain == "DEGEN") {
-      coffee = amount * 300
+      coffee = selectedAmount * 300
       displayAmt = coffee + " DEGEN"
     } else {
-      coffee = amount * 0.0015
+      coffee = selectedAmount * 0.0015
       displayAmt = coffee + " ETH"
     }
 
-    const usd = amount * 5.5
+    const usd = selectedAmount * 5.5
 
     return {
       image: (
@@ -106,7 +111,7 @@ const handleRequest = async (
                   fontSize: "30px"
                 }
               } tw="font=bold" >
-                You are buying {amount} Coffee for {data.users[0].display_name}
+                You are buying {selectedAmount} Coffee for {data.users[0].display_name}
               </span>
               <span style={
                 {

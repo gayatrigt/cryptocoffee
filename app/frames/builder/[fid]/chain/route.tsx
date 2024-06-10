@@ -30,6 +30,7 @@ const handleRequest = async (
 
   return await frames(async (ctx) => {
     const chain = ctx.searchParams.chain;
+    console.log("🚀 ~ returnawaitframes ~ chain:", chain)
 
     let chainLabel = "ETH"
     let amount = "0.0015"
@@ -90,40 +91,49 @@ const handleRequest = async (
           </div>
         </div>
       ),
-      buttons: [
-        <Button
-          action="post"
-          target={{
-            pathname: `/builder/${routeFid}/chain/transaction`, query: { amount: "1", chain: chainLabel }
-          }}
-        >
-          1
-        </Button >,
-        <Button
-          action="post"
-          target={{
-            pathname: `/builder/${routeFid}/chain/transaction`, query: { amount: "2", chain: chainLabel }
-          }}
-        >
-          2
-        </Button >,
-        <Button
-          action="post"
-          target={{
-            pathname: `/builder/${routeFid}/chain/transaction`, query: { amount: "5", chain: chainLabel }
-          }}
-        >
-          5
-        </Button >,
-        <Button
-          action="post"
-          target={{
-            pathname: `/builder/${routeFid}/chain/transaction`, query: { amount: "10", chain: chainLabel }
-          }}
-        >
-          10
-        </Button >,
-      ]
+      textInput: ctx.url.searchParams.has("custom") && "How many cups of coffee?",
+      buttons: !ctx.url.searchParams.has("custom")
+        ? [
+          <Button
+            action="post"
+            target={{
+              pathname: `/builder/${routeFid}/chain/transaction`, query: { amount: "1", chain: chainLabel }
+            }}
+          >
+            1
+          </Button >,
+          <Button
+            action="post"
+            target={{
+              pathname: `/builder/${routeFid}/chain/transaction`, query: { amount: "2", chain: chainLabel }
+            }}
+          >
+            2
+          </Button >,
+          <Button
+            action="post"
+            target={{
+              pathname: `/builder/${routeFid}/chain/transaction`, query: { amount: "5", chain: chainLabel }
+            }}
+          >
+            5
+          </Button >,
+          <Button action="post" target={{
+            pathname: `/builder/${routeFid}/chain`,
+            query: { custom: true, chain }
+          }}>
+            Custom
+          </Button>, ,
+        ] : [
+          <Button
+            action="post"
+            target={{
+              pathname: `/builder/${routeFid}/chain/transaction`, query: { chain: chainLabel, customAmount: true }
+            }}
+          >
+            Buy Coffee
+          </Button >
+        ]
       ,
     };
   })(req)
