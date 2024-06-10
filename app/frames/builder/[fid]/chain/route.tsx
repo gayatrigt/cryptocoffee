@@ -91,7 +91,7 @@ const handleRequest = async (
           </div>
         </div>
       ),
-      textInput: ctx.url.searchParams.has("custom") && "How many cups of coffee?",
+      textInput: ctx.url.searchParams.has("custom") ? "How many cups of coffee?" : undefined,
       buttons: !ctx.url.searchParams.has("custom")
         ? [
           <Button
