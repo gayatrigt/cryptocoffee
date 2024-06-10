@@ -97,7 +97,7 @@ const handleRequest = async (
           <Button
             action="post"
             target={{
-              pathname: `/builder/${routeFid}/chain/transaction`, query: { amount: "1", chain: chainLabel }
+              pathname: `/builder/${routeFid}/chain/transaction`, query: { amount: "1", chain: chain }
             }}
           >
             1
@@ -105,7 +105,7 @@ const handleRequest = async (
           <Button
             action="post"
             target={{
-              pathname: `/builder/${routeFid}/chain/transaction`, query: { amount: "2", chain: chainLabel }
+              pathname: `/builder/${routeFid}/chain/transaction`, query: { amount: "2", chain: chain }
             }}
           >
             2
@@ -113,7 +113,7 @@ const handleRequest = async (
           <Button
             action="post"
             target={{
-              pathname: `/builder/${routeFid}/chain/transaction`, query: { amount: "5", chain: chainLabel }
+              pathname: `/builder/${routeFid}/chain/transaction`, query: { amount: "5", chain: chain }
             }}
           >
             5
@@ -128,7 +128,7 @@ const handleRequest = async (
           <Button
             action="post"
             target={{
-              pathname: `/builder/${routeFid}/chain/transaction`, query: { chain: chainLabel, customAmount: true }
+              pathname: `/builder/${routeFid}/chain/transaction`, query: { chain: chain, customAmount: true }
             }}
           >
             Buy Coffee
