@@ -1,6 +1,7 @@
 import { farcasterHubContext } from "frames.js/middleware";
 import { createFrames, Button } from "frames.js/next";
 import { transaction } from "frames.js/core";
+import { parseUnits } from 'ethers';
 
 const frames = createFrames({
     basePath: '/frames',
@@ -27,9 +28,12 @@ const handleRequest = frames(async (ctx) => {
     const chain = ctx.searchParams.chain;
     const wallet = ctx.searchParams.wallet
 
+    console.log("🚀 ~ handleRequest ~ amount:", amount)
 
     const chainId = chainIdMap[chain]
-    const value = amount * 1e18
+    // const value = amount * 1e18
+    const value = parseUnits(String(amount), "ether")
+    console.log("🚀 ~ handleRequest ~ value:", value)
 
     return transaction({
         chainId: `eip155:${chainId}`,
