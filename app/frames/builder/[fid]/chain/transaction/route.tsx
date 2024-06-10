@@ -29,7 +29,7 @@ const handleRequest = async (
 ) => {
 
   return await frames(async (ctx) => {
-    const response = await fetch(`http://localhost:3000/api/user-details?fid=${routeFid}`);
+    const response = await fetch(`https://cryptocoffee-opal.vercel.app/api/user-details?fid=${routeFid}`);
     const data = await response.json();
 
     if (ctx.message?.transactionId) {

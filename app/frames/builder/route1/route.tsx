@@ -81,7 +81,7 @@ const handleRequest = frames(async (ctx) => {
         Show My Frame
       </Button>,
       <Button action='link'
-        key={"share"} target={`https://warpcast.com/~/compose?embeds[]=https://www.farcasterworth.com/frames/builder/${fid}`}>
+        key={"share"} target={`https://warpcast.com/~/compose?embeds[]=https://cryptocoffee-opal.vercel.app/frames/builder/${fid}`}>
         Share My Frame
       </Button>
     ]
