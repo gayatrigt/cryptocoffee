@@ -63,6 +63,7 @@ const handleRequest = async (
 
     const wallet = data.users[0].verified_addresses.eth_addresses[0]
 
+    console.log("🚀 ~ returnawaitframes ~ chain == DEGEN:", chain == "DEGEN")
     if (chain == "DEGEN") {
       coffee = amount * 300
       displayAmt = coffee + " DEGEN"

@@ -94,7 +94,7 @@ const handleRequest = async (
         <Button
           action="post"
           target={{
-            pathname: `/builder/${routeFid}/chain/transaction`, query: { amount: "1", chain: `${chainLabel}` }
+            pathname: `/builder/${routeFid}/chain/transaction`, query: { amount: "1", chain: chainLabel }
           }}
         >
           1
@@ -102,7 +102,7 @@ const handleRequest = async (
         <Button
           action="post"
           target={{
-            pathname: `/builder/${routeFid}/chain/transaction`, query: { amount: "2", chain: `${chainLabel}` }
+            pathname: `/builder/${routeFid}/chain/transaction`, query: { amount: "2", chain: chainLabel }
           }}
         >
           2
@@ -110,7 +110,7 @@ const handleRequest = async (
         <Button
           action="post"
           target={{
-            pathname: `/builder/${routeFid}/chain/transaction`, query: { amount: "5", chain: `${chainLabel}` }
+            pathname: `/builder/${routeFid}/chain/transaction`, query: { amount: "5", chain: chainLabel }
           }}
         >
           5
@@ -118,7 +118,7 @@ const handleRequest = async (
         <Button
           action="post"
           target={{
-            pathname: `/builder/${routeFid}/chain/transaction`, query: { amount: "10" }
+            pathname: `/builder/${routeFid}/chain/transaction`, query: { amount: "10", chain: chainLabel }
           }}
         >
           10
