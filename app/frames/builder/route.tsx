@@ -1,6 +1,10 @@
 import { farcasterHubContext } from "frames.js/middleware";
 import { createFrames, Button } from "frames.js/next";
 
+export type State = {
+  chain: string;
+};
+
 const frames = createFrames({
   basePath: '/frames',
   middleware: [
@@ -9,45 +13,45 @@ const frames = createFrames({
       ...(process.env.NODE_ENV === "production"
         ? {}
         : {
-            hubHttpUrl: "http://localhost:3010/hub",
-          }),
+          hubHttpUrl: "http://localhost:3010/hub",
+        }),
     }),
   ],
+  initialState: {
+    chain: "",
+  },
 });
 
 const handleRequest = frames(async (ctx) => {
+
   return {
-    image: ctx.message ? (
+    image: (
       <div
         style={{
           display: "flex",
           flexDirection: "column",
+          width: "70%",
+          alignItems: "center",
+          textAlign: "center",
+          fontSize: "52",
+          fontWeight: "bold"
         }}
       >
-        GM, {ctx.message.requesterUserData?.displayName}! Your FID is{" "}
-        {ctx.message.requesterFid}
-        {", "}
-        {ctx.message.requesterFid < 20_000
-          ? "you're OG!"
-          : "welcome to the Farcaster!"}
-      </div>
-    ) : (
-      <div
-        style={{
-          display: "flex",
-          flexDirection: "column",
-        }}
-      >
-        Say GM
+        Fuel your Frames with some Crypto Coffee
+        <span style={{
+          fontSize: "24",
+        }}>
+          Give your audience
+          an easy way to say thanks
+        </span>
       </div>
     ),
-    buttons: !ctx.url.searchParams.has("saidGm")
-      ? [
-          <Button action="post" target={{ query: { saidGm: true } }}>
-            Say GM
-          </Button>,
-        ]
-      : [],
+    buttons: [
+      <Button action="post" target="/builder/route1">
+        Get Started
+      </Button>,
+    ]
+    ,
   };
 });
 
