@@ -73,7 +73,7 @@ const handleRequest = async (
       coffee = selectedAmount * 300
       displayAmt = coffee + " DEGEN"
     } else {
-      coffee = selectedAmount * 0.0015
+      coffee = parseFloat((selectedAmount * 0.0015).toFixed(4))
       displayAmt = coffee + " ETH"
     }
 
