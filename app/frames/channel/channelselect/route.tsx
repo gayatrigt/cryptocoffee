@@ -1,13 +1,16 @@
 import { frames } from "@/app/utils/frames";
 import { farcasterHubContext } from "frames.js/middleware";
 import { createFrames, Button } from "frames.js/next";
+import { env } from "process";
 
 const handleRequest = frames(async (ctx) => {
 
-  const fid = ctx.message?.requesterFid
+  const channel = ctx.message?.inputText
 
-  const name = ctx.message?.requesterUserData?.displayName
-  const pfp = ctx.message?.requesterUserData?.profileImage
+  const response = await fetch(`${env.HOST_URL}/api/channel-details?cid=${channel}`);
+  const data = await response.json();
+
+  console.log(data)
 
   return {
     image: (
@@ -33,8 +36,8 @@ const handleRequest = frames(async (ctx) => {
                 objectFit: "cover",
               }
             }
-            tw='h-20 w-20 rounded-full '
-            src={pfp}
+            tw='h-24 w-24 rounded-full '
+            src={data.channels[0].image_url}
           />
           <div style={
             {
@@ -46,33 +49,33 @@ const handleRequest = frames(async (ctx) => {
           }>
             <span style={
               {
-                fontSize: "30px"
+                fontSize: "40px"
               }
-            } tw="font=bold" > Hey {name},
+            } tw="font=bold" > {data.channels[0].name}
             </span>
             <span style={
               {
-                fontSize: "20px"
+                fontSize: "24px",
+                marginTop: "30px"
               }
             } tw="font=normal" >
-              Buy Me a Coffee makes supporting fun and easy.
-              In just a couple of taps, your fans can make the payment (buy you a coffee) and
-              support your frames!
+              Confirm to get paid to wallet associated with @{data.channels[0].lead.username}
             </span>
           </div>
         </div>
       </div>
     ),
     buttons: [
-      <Button action="post" target={`/builder/${fid}`}>
-        Show My Frame
-      </Button>,
-      <Button action='link'
-        key={"share"} target={`https://warpcast.com/~/compose?embeds[]=https://cryptocoffee-opal.vercel.app/frames/builder/${fid}`}>
-        Share My Frame
-      </Button>
+      <Button action="post" target={{
+        pathname: "/channel/setgoal", query: { channel: data.channels[0].id }
+      }}
+      >
+        Confirm
+      </Button >,
+      <Button action="post" target="/channel/channelsearch" >
+        Search Again
+      </Button >
     ]
-    ,
   };
 });
 

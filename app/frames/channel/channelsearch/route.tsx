@@ -56,21 +56,19 @@ const handleRequest = frames(async (ctx) => {
               }
             } tw="font=normal" >
               Buy Me a Coffee makes supporting fun and easy.
-              In just a couple of taps, your fans can make the payment (buy you a coffee) and
-              support your frames!
+              In just a couple of taps, your channel followers can make the payment (buy you a coffee) and
+              support you!
+              Add your channel name to get started
             </span>
           </div>
         </div>
       </div>
     ),
+    textInput: "Channel Usenrname",
     buttons: [
-      <Button action="post" target={`/builder/${fid}`}>
-        Show My Frame
+      <Button action="post" target={`/channel/channelselect`}>
+        Set Goal
       </Button>,
-      <Button action='link'
-        key={"share"} target={`https://warpcast.com/~/compose?embeds[]=https://cryptocoffee-opal.vercel.app/frames/builder/${fid}`}>
-        Share My Frame
-      </Button>
     ]
     ,
   };

@@ -9,12 +9,12 @@ export type State = {
 
 const handleRequest = async (
   req: NextRequest,
-  { params: { fid: routeFid } }: { params: { fid: string } }
+  { params: { cid: campaignid } }: { params: { cid: string } }
 ) => {
 
   return await frames(async (ctx) => {
 
-    const response = await fetch(`https://cryptocoffee-opal.vercel.app/api/user-details?fid=${routeFid}`);
+    const response = await fetch(`https://cryptocoffee-opal.vercel.app/api/user-details?fid=${channelid}`);
     const data = await response.json();
 
     return {

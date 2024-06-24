@@ -24,7 +24,7 @@ const handleRequest = frames(async (ctx) => {
       </div>
     ),
     buttons: [
-      <Button action="post" target="/builder/route1">
+      <Button action="post" target="/channel/channelsearch">
         Get Started
       </Button>,
     ],

@@ -2,20 +2,7 @@ import { farcasterHubContext } from "frames.js/middleware";
 import { createFrames, Button } from "frames.js/next";
 import { transaction } from "frames.js/core";
 import { parseUnits } from 'ethers';
-
-const frames = createFrames({
-    basePath: '/frames',
-    middleware: [
-        farcasterHubContext({
-            hubHttpUrl: "https://hubs.airstack.xyz",
-            hubRequestOptions: {
-                headers: {
-                    "x-airstack-hubs": process.env.AIRSTACK_API_KEY as string,
-                },
-            },
-        }),
-    ],
-});
+import { frames } from "@/app/utils/frames";
 
 const chainIdMap: Record<string, number> = {
     base: 8453,
