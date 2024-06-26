@@ -127,10 +127,7 @@ const handleRequest = async (
         </div>
       ),
       buttons: [
-        <Button action="post" target={{
-          pathname: "/channel/fundframe", query: { campaign: campaign }
-        }}
-        >
+        <Button action="post" target={`/channel/fund/${campaign}`}>
           Refresh
         </Button>,
         <Button action="post" target={`/channel/${cid}`}>
