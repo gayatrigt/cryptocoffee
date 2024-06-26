@@ -53,10 +53,7 @@ const handleRequest = frames(async (ctx) => {
     ),
     textInput: "$USD",
     buttons: [
-      <Button action="post" target={{
-        pathname: "/channel/fundframe", query: { campaign: campaignId }
-      }}
-      >
+      <Button action="post" target={`/channel/fund/${campaignId}`}>
         Get the frame
       </Button >
     ]

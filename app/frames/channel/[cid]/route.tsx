@@ -9,13 +9,13 @@ export type State = {
 
 const handleRequest = async (
   req: NextRequest,
-  { params: { cid: campaignid } }: { params: { cid: string } }
+  { params: { cid: campaign } }: { params: { cid: string } }
 ) => {
 
   return await frames(async (ctx) => {
 
-    const response = await fetch(`https://cryptocoffee-opal.vercel.app/api/user-details?fid=${channelid}`);
-    const data = await response.json();
+    const chainLabel = "ETH"
+    const amount = "0.0001"
 
     return {
       image: (
@@ -35,15 +35,7 @@ const handleRequest = async (
             alignItems: "center",
             gap: "4px"
           }}>
-            <img
-              style={
-                {
-                  objectFit: "cover",
-                }
-              }
-              tw='h-24 w-24 rounded-full '
-              src={data.users[0].pfp_url}
-            />
+
             <div style={
               {
                 display: "flex",
@@ -56,46 +48,69 @@ const handleRequest = async (
                 {
                   fontSize: "40px"
                 }
-              } tw="font=bold" > Say thanks to {data.users[0].display_name}
+              } tw="font=bold" > 1 Coffee = {amount} {chainLabel}
               </span>
               <span style={
                 {
-                  fontSize: "24px",
+                  fontSize: "20px"
+                }
+              } tw="font=light" > (~ $5.5)
+              </span>
+              <span style={
+                {
+                  fontSize: "30px",
                   marginTop: "30px"
                 }
               } tw="font=normal" >
-                Select a chain to buy a coffee
+                How many coffee you want to buy?
               </span>
             </div>
           </div>
         </div>
       ),
-      buttons: [
-        <Button
-          action="post"
-          target={{
-            pathname: `/builder/${routeFid}/chain`, query: { chain: "base" }
-          }}
-        >
-          Base
-        </Button >,
-        <Button
-          action="post"
-          target={{
-            pathname: `/builder/${routeFid}/chain`, query: { chain: "art" }
-          }}
-        >
-          Arbitrium
-        </Button >,
-        <Button
-          action="post"
-          target={{
-            pathname: `/builder/${routeFid}/chain`, query: { chain: "degen" }
-          }}
-        >
-          DEGEN
-        </Button >,
-      ]
+      textInput: ctx.url.searchParams.has("custom") ? "How many cups of coffee?" : undefined,
+      buttons: !ctx.url.searchParams.has("custom")
+        ? [
+          <Button
+            action="post"
+            target={{
+              pathname: `/channel/${campaign}/transaction`, query: { amount: "1" }
+            }}
+          >
+            1
+          </Button >,
+          <Button
+            action="post"
+            target={{
+              pathname: `/channel/${campaign}/transaction`, query: { amount: "2" }
+            }}
+          >
+            2
+          </Button >,
+          <Button
+            action="post"
+            target={{
+              pathname: `/channel/${campaign}/transaction`, query: { amount: "5" }
+            }}
+          >
+            5
+          </Button >,
+          <Button action="post" target={{
+            pathname: `/channel/${campaign}`,
+            query: { custom: true }
+          }}>
+            Custom
+          </Button>, ,
+        ] : [
+          <Button
+            action="post"
+            target={{
+              pathname: `/channel/${campaign}/transaction`, query: { customAmount: true }
+            }}
+          >
+            Buy Coffee
+          </Button >
+        ]
       ,
     };
   })(req)
