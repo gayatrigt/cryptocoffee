@@ -105,7 +105,7 @@ const handleRequest = frames(async (ctx) => {
   };
 });
 
-export function BgImage({ width = '100%', tw }: { width?: string; tw?: string }) {
+function BgImage({ width = '100%', tw }: { width?: string; tw?: string }) {
   return <img src={`${env.HOST_URL}/bgall.png`} alt="background" width={width} tw={tw} />;
 }
 

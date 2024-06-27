@@ -5,6 +5,7 @@ import { createFrames, Button } from "frames.js/next";
 import { env } from "process";
 import { v4 as uuidv4 } from 'uuid';
 
+
 const handleRequest = frames(async (ctx) => {
 
   const fid = ctx.searchParams.fid
@@ -20,45 +21,32 @@ const handleRequest = frames(async (ctx) => {
       <div
         style={{
           display: "flex",
-          flexDirection: "column",
-          width: "70%",
           alignItems: "center",
-          textAlign: "center",
+          justifyContent: "center",
+          width: "100%",
+          height: "100%",
+          position: "relative",
         }}
       >
-        <div style={{
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "center",
-          alignItems: "center",
-          gap: "4px"
-        }}>
-          <div style={
-            {
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-              flexDirection: "column",
-            }
-          }>
-            <span style={
-              {
-                fontSize: "40px"
-              }
-            } tw="font=bold" > Set your goal for the campaign in USD
-            </span>
-          </div>
-        </div>
+        <BgImage />
       </div>
     ),
+    imageOptions: {
+      width: 650,
+      height: 356,
+    },
     textInput: "$USD",
     buttons: [
       <Button action="post" target={`/indi/fund/${campaignId}`}>
         Get the frame
-      </Button >
+      </Button>
     ]
   };
 });
+
+function BgImage({ width = '100%', tw }: { width?: string; tw?: string }) {
+  return <img src={`${env.HOST_URL}/amount.png`} alt="background" width={width} tw={tw} />;
+}
 
 export const GET = handleRequest;
 export const POST = handleRequest;
