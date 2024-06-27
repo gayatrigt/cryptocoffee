@@ -3,7 +3,7 @@ import { frames } from "@/app/utils/frames";
 import { farcasterHubContext } from "frames.js/middleware";
 import { createFrames, Button } from "frames.js/next";
 import { NextRequest } from "next/server";
-import { Channel } from "../../fund/[camp]/route";
+import { Channel } from "../../f/[camp]/route";
 import { env } from "process";
 
 export type State = {
@@ -47,11 +47,11 @@ const handleRequest = async (
           >
             View on block explorer
           </Button>,
-          <Button action="post" target={`/channel/fund/${campaign}`}>
+          <Button action="post" target={`/chan/f/${campaign}`}>
             See Goal
           </Button>,
           <Button action='link'
-            key={"share"} target={`https://warpcast.com/~/compose?embeds[]=https://cryptocoffee-opal.vercel.app/frames/channel/fund/${campaign}`}>
+            key={"share"} target={`https://warpcast.com/~/compose?embeds[]=${env.HOST_URL}/frames/chan/f/${campaign}`}>
             Share Frame
           </Button>
         ],
@@ -139,8 +139,8 @@ const handleRequest = async (
       ),
       buttons: [
         <Button action="tx" target={{
-          pathname: `/channel/txdata`, query: { amount: coffee, wallet: wallet, chain: chain }
-        }} post_url={`/channel/${campaign}/transaction`}>
+          pathname: `/chan/txdata`, query: { amount: coffee, wallet: wallet, chain: chain }
+        }} post_url={`/chan/${campaign}/transaction`}>
           Buy Coffee
         </Button>,
       ]

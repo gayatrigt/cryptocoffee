@@ -74,7 +74,7 @@ const handleRequest = async (
           <Button
             action="post"
             target={{
-              pathname: `/channel/${campaign}/transaction`, query: { amount: "1" }
+              pathname: `/indi/${campaign}/transaction`, query: { amount: "1" }
             }}
           >
             1
@@ -82,7 +82,7 @@ const handleRequest = async (
           <Button
             action="post"
             target={{
-              pathname: `/channel/${campaign}/transaction`, query: { amount: "2" }
+              pathname: `/indi/${campaign}/transaction`, query: { amount: "2" }
             }}
           >
             2
@@ -90,7 +90,7 @@ const handleRequest = async (
           <Button
             action="post"
             target={{
-              pathname: `/channel/${campaign}/transaction`, query: { amount: "5" }
+              pathname: `/indi/${campaign}/transaction`, query: { amount: "5" }
             }}
           >
             5
@@ -105,7 +105,7 @@ const handleRequest = async (
           <Button
             action="post"
             target={{
-              pathname: `/channel/${campaign}/transaction`, query: { customAmount: true }
+              pathname: `/indi/${campaign}/transaction`, query: { customAmount: true }
             }}
           >
             Buy Coffee
