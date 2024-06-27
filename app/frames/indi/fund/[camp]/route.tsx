@@ -41,6 +41,25 @@ const handleRequest = async (
   return await frames(async (ctx) => {
     console.log('Frames function started');
 
+    const campaign = campaignId;
+    const inputText = ctx.message?.inputText;
+    const hash = ctx.message?.castId?.hash
+
+    console.log("castid:", ctx.message?.castId)
+
+    if (inputText) {
+      console.log(`Updating goal amount to: ${inputText}`);
+      const updateResponse = await supabase
+        .from('channels')
+        .update({ goal_amt: parseFloat(inputText) })
+        .eq('campaign_id', campaign);
+
+      if (updateResponse.error) {
+        throw updateResponse.error;
+      }
+      await cache.set(`campaign:${campaign}`, null);
+    }
+
     const timeoutPromise = new Promise<any>((resolve) =>
       setTimeout(() =>
         resolve({
@@ -95,25 +114,6 @@ const handleRequest = async (
 
     const fetchDataPromise = (async () => {
       console.log('Starting fetchDataPromise');
-
-      const campaign = campaignId;
-      const inputText = ctx.message?.inputText;
-      const hash = ctx.message?.castId?.hash
-
-      console.log("castid:", ctx.message?.castId)
-
-      if (inputText) {
-        console.log(`Updating goal amount to: ${inputText}`);
-        const updateResponse = await supabase
-          .from('channels')
-          .update({ goal_amt: parseFloat(inputText) })
-          .eq('campaign_id', campaign);
-
-        if (updateResponse.error) {
-          throw updateResponse.error;
-        }
-        await cache.set(`campaign:${campaign}`, null);
-      }
 
       let campaignDetails, verifyTipsResult;
 
