@@ -18,6 +18,7 @@ const handleRequest = async (
     const data = await response.json();
 
     if (ctx.message?.transactionId) {
+
       return {
         image: (
           <div tw="text-black w-full h-full justify-center items-center flex">

@@ -35,7 +35,6 @@ const handleRequest = async (
   { params: { camp: campaignId } }: { params: { camp: string } }
 ) => {
   console.log(`Request started for campaign: ${campaignId}`);
-  const startTime = Date.now();
   const fonts = await loadFonts();
 
   return await frames(async (ctx) => {
@@ -108,7 +107,7 @@ const handleRequest = async (
             </Button>,
           ],
         }),
-        2000 // 4 second timeout
+        1500 // 4 timeout
       )
     );
 
@@ -130,12 +129,15 @@ const handleRequest = async (
         console.log('Campaign details fetched');
       }
 
+
       console.log('Campaign details and tips verified, calculating progress');
       const data = campaignDetails;
       const amount = inputText || data.goal_amt;
       const progress = await calculateProgress(amount, campaign);
 
       const progressPercentage = `${progress.percentageCompleted}%`;
+
+      const words = data.campaign_name
 
       console.log('Preparing response');
       return {
@@ -181,12 +183,12 @@ const handleRequest = async (
                     Support {data.indi_name}
                   </span>
                   <span style={{
-                    fontSize: "36px",
+                    fontSize: "30px",
                     marginTop: "20px",
                     fontFamily: "'IntegralCF', sans-serif",
                     color: "white",
                   }} tw="font-bold">
-                    {data.campaign_name}
+                    {words}
                   </span>
                   <span style={{
                     fontSize: "15px",
@@ -325,6 +327,20 @@ async function getCampaignDetails(campaignId: string): Promise<Channel> {
 
 interface SumResult {
   sum_amt_usd: number | null;
+}
+
+async function fetchTransactions(campaignId: string) {
+  const { data, error } = await supabase
+    .from('Transactions')
+    .select('amt_usd')
+    .eq('campaign_id', campaignId);
+
+  if (error) {
+    console.error('Error fetching transactions for campaign ID', campaignId, ':', error);
+    return []; // Return an empty array if there's an error
+  }
+
+  return data.map(entry => entry.amt_usd);  // Extracting the amount in USD from each transaction
 }
 
 async function calculateProgress(goal: any, campaignId: string) {

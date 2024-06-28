@@ -5,15 +5,21 @@ import { createFrames, Button } from "frames.js/next";
 import { NextRequest } from "next/server";
 import { Channel } from "../../fund/[camp]/route";
 import { env } from "process";
+import { cache } from "@/app/utils/kvclient";
+import { loadFonts } from "@/app/utils/fontloader";
 
 export type State = {
   chain: string;
 };
 
+export const runtime = "edge";
+
 const handleRequest = async (
   req: NextRequest,
   { params: { cid: campaign } }: { params: { cid: string } }
 ) => {
+
+  const fonts = await loadFonts();
 
   return await frames(async (ctx) => {
     const data = await getCampaignDetails(campaign)
@@ -35,23 +41,94 @@ const handleRequest = async (
 
       return {
         image: (
-          <div tw="text-black w-full h-full justify-center items-center flex">
-            You just bought coffee for {data.indi_name}
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              width: "100%",
+              height: "100%",
+              position: "relative",
+            }}
+          >
+            <BgImage />
+            <div
+              style={{
+                position: "absolute",
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "center",
+                alignItems: "center",
+                gap: "4px",
+                padding: "20px",
+                textAlign: "center",
+              }}
+            >
+              <img
+                style={{
+                  objectFit: "cover",
+                  boxShadow: "0 4px 12px rgba(0, 0, 0, 0.2)",
+                }}
+                tw="h-20 w-20"
+                src={data.image_url}
+              />
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  flexDirection: "column",
+                  marginTop: "10px"
+                }}
+              >
+                <span style={{ fontSize: "30px", fontFamily: "'Inter', sans-serif" }} tw="font-normal text-white">
+                  You just bought BasedCoffee for
+                </span>
+                <span style={{ fontSize: "30px", fontFamily: "'Inter', sans-serif" }} tw="font-normal text-white">
+                  {data.indi_name}
+                </span>
+              </div>
+            </div>
           </div>
         ),
+        imageOptions: {
+          width: 650,
+          height: 356,
+          fonts: [
+            {
+              name: "Inter",
+              data: fonts.interRegular,
+              weight: 400,
+            },
+            {
+              name: "Inter",
+              data: fonts.interBold,
+              weight: 700,
+            },
+            {
+              name: "IntegralCF",
+              data: fonts.integralBold,
+              weight: 700,
+            },
+          ],
+        },
         buttons: [
           <Button
             action="link"
             target={`https://www.onceupon.gg/tx/${ctx.message.transactionId}`}
           >
-            View on block explorer
+            View Txn
           </Button>,
           <Button action="post" target={`/indi/fund/${campaign}`}>
-            See Goal
+            Check Goal
           </Button>,
           <Button action='link'
             key={"share"} target={`https://warpcast.com/~/compose?embeds[]=https://cryptocoffee-opal.vercel.app/frames/indi/fund/${campaign}`}>
             Share Frame
+          </Button>,
+          <Button action='link'
+            key={"share"} target={`https://warpcast.com/gayatri`}>
+            Follow Builder
           </Button>
         ],
       };
@@ -76,7 +153,6 @@ const handleRequest = async (
     const coffee = parseFloat((selectedAmount * 0.0001).toFixed(4))
     const displayAmt = coffee + " ETH"
 
-
     const usd = selectedAmount * 5.5
 
     createTransactionRow(fromFid, fromWallet, data.fid_indi, wallet,
@@ -88,54 +164,104 @@ const handleRequest = async (
           style={{
             display: "flex",
             flexDirection: "column",
-            width: "70%",
             alignItems: "center",
             textAlign: "center",
+            justifyContent: "center",
           }}
         >
-          <div style={{
-            display: "flex",
-            flexDirection: "column",
-            justifyContent: "center",
-            alignItems: "center",
-            gap: "4px"
-          }}>
-
-            <div style={
-              {
+          <BgImage />
+          <div
+            style={{
+              position: "absolute",
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "center",
+              alignItems: "center",
+              gap: "4px",
+              padding: "20px",
+              textAlign: "center",
+            }}
+          >
+            <img
+              style={{
+                objectFit: "cover",
+                boxShadow: "0 4px 12px rgba(0, 0, 0, 0.2)",
+              }}
+              tw="h-20 w-20"
+              src={data.image_url}
+            />
+            <div
+              style={{
                 display: "flex",
                 justifyContent: "center",
                 alignItems: "center",
                 flexDirection: "column",
-              }
-            }>
-              <span style={
-                {
-                  fontSize: "30px"
-                }
-              } tw="font=bold" >
-                You are buying {selectedAmount} Coffee for {data.indi_name}
+                marginTop: "10px"
+              }}
+            >
+              <span style={{ fontSize: "25px", fontFamily: "'IntegralCF', sans-serif", fontWeight: "400", margin: "2px" }} tw="font-normal text-white">
+                You are buying {selectedAmount} Coffee/s for
               </span>
-              <span style={
-                {
-                  fontSize: "50px",
-                  marginTop: "30px"
-                }
-              } tw="font=bold" >
-                {displayAmt}
+              <span style={{ fontSize: "25px", fontFamily: "'IntegralCF', sans-serif", fontWeight: "400" }} tw="font-normal text-white">
+                {data.indi_name}
               </span>
-              <span style={
-                {
-                  fontSize: "30px",
-                  marginTop: "5px"
-                }
-              } tw="font=normal" >
-                (${usd})
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  marginTop: "10px"
+                }}
+              >
+                <span style={{ fontSize: "30px", fontFamily: "'IntegralCF', sans-serif", fontWeight: "700" }} tw="font-normal text-white">
+                  {displayAmt}
+                </span>
+                <img src={`${env.HOST_URL}/eth-logo.png`} alt="" tw="w-6 h-8 pb-2" style={{ display: "flex" }} />
+              </div>
+              <span style={{
+                fontSize: "16px",
+                fontFamily: "'IntegralCF', sans-serif",
+                fontWeight: "400",
+                width: "50px",
+                height: "20px",
+                backgroundColor: "#D98243",
+                color: "white",
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center"
+              }} tw="font-normal">
+                ~$ {usd}
               </span>
             </div>
           </div>
         </div>
       ),
+      imageOptions: {
+        width: 650,
+        height: 356,
+        fonts: [
+          {
+            name: "Inter",
+            data: fonts.interRegular,
+            weight: 400,
+          },
+          {
+            name: "Inter",
+            data: fonts.interBold,
+            weight: 700,
+          },
+          {
+            name: "IntegralCF",
+            data: fonts.integralBold,
+            weight: 700,
+          },
+          {
+            name: "IntegralCF",
+            data: fonts.integralRegular,
+            weight: 400,
+          },
+        ],
+      },
       buttons: [
         <Button action="tx" target={{
           pathname: `/indi/txdata`, query: { amount: coffee, wallet: wallet, chain: chain }
@@ -147,6 +273,11 @@ const handleRequest = async (
     };
   })(req)
 };
+
+
+function BgImage({ width = '100%', tw }: { width?: string; tw?: string }) {
+  return <img src={`${env.HOST_URL}/bgall.png`} alt="background" width={width} tw={tw} />;
+}
 
 export const GET = handleRequest;
 export const POST = handleRequest;
@@ -220,4 +351,34 @@ async function createTransactionRow(from_fid: any, from_wallet: any, to_fid: num
     console.error('Error creating transaction row:', error);
     throw error;
   }
+}
+
+async function getConversionRate(): Promise<number> {
+  const cacheKey = 'eth_usd_rate';
+  let rate = await cache.get(cacheKey);
+
+  if (!rate) {
+    const { data, error } = await supabase
+      .from('usd_rate')
+      .select('rate')
+      .order('updated_at', { ascending: false })
+      .limit(1)
+      .single();
+
+    if (error || !data) {
+      throw new Error('Error fetching conversion rate');
+    }
+
+    rate = data.rate;
+    // Cache for 24 hours
+    await cache.set(cacheKey, rate, { ex: 86400 });
+  }
+
+  return rate as number;
+}
+
+function convertEthToUSD(ethAmount: number, rate: number): number {
+  const usdAmount = ethAmount * rate;
+  const roundedAmount = Math.round(usdAmount * 100) / 100;
+  return roundedAmount
 }

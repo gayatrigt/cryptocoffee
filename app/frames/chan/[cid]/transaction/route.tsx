@@ -10,7 +10,6 @@ export type State = {
   chain: string;
 };
 
-
 const handleRequest = async (
   req: NextRequest,
   { params: { cid: campaign } }: { params: { cid: string } }

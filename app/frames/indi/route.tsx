@@ -1,3 +1,4 @@
+import { loadFonts } from "@/app/utils/fontloader";
 import { frames } from "@/app/utils/frames";
 import { farcasterHubContext } from "frames.js/middleware";
 import { createFrames, Button } from "frames.js/next";
@@ -5,19 +6,8 @@ import { env } from "process";
 
 export const runtime = "edge";
 
-const interRegularFont = fetch(
-  new URL("/public/inter/Inter-Regular.ttf", import.meta.url)
-).then((res) => res.arrayBuffer());
-const interBoldFont = fetch(
-  new URL("/public/inter/Inter-Bold.ttf", import.meta.url)
-).then((res) => res.arrayBuffer());
-const integralBoldFont = fetch(
-  new URL("/public/integral/IntegralCF-Bold.ttf", import.meta.url)
-).then((res) => res.arrayBuffer());
-
 const handleRequest = frames(async (ctx) => {
-  const [interRegularFontData, interBoldFontData, integralBoldFontData] =
-    await Promise.all([interRegularFont, interBoldFont, integralBoldFont]);
+  const fonts = await loadFonts();
 
   const fid = ctx.message?.requesterFid
 
@@ -66,10 +56,16 @@ const handleRequest = frames(async (ctx) => {
               marginTop: "10px"
             }}
           >
-            <span style={{ fontSize: "30px", fontFamily: "'IntegralCF', sans-serif" }} tw="font-bold text-white">
+            <span style={{
+              fontSize: "30px",
+              fontFamily: "'IntegralCF', sans-serif"
+            }} tw="font-bold text-white">
               Hey {name}
             </span>
-            <span style={{ fontSize: "20px", fontFamily: "'Inter', sans-serif" }} tw="font-normal text-white">
+            <span style={{
+              fontSize: "20px",
+              fontFamily: "'Inter', sans-serif"
+            }} tw="font-normal text-white">
               What do you wnat to raise funds for?
             </span>
             <span style={{ fontSize: "20px", fontFamily: "'Inter', sans-serif" }} tw="font-normal text-white">
@@ -85,17 +81,17 @@ const handleRequest = frames(async (ctx) => {
       fonts: [
         {
           name: "Inter",
-          data: interRegularFontData,
+          data: fonts.interRegular,
           weight: 400,
         },
         {
           name: "Inter",
-          data: interBoldFontData,
+          data: fonts.interBold,
           weight: 700,
         },
         {
           name: "IntegralCF",
-          data: integralBoldFontData,
+          data: fonts.integralBold,
           weight: 700,
         },
       ],
