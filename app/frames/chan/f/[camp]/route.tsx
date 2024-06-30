@@ -313,7 +313,7 @@ async function getCampaignDetails(campaignId: string): Promise<Channel> {
 
     return data as Channel;
   } catch (error) {
-    console.error('Error fetching campaign details:', error);
+    console.error(`Error fetching campaign details, campaignId: ${campaignId}`, error);
     throw error;
   }
 }
