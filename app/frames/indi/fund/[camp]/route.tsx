@@ -114,24 +114,18 @@ const handleRequest = async (
     const fetchDataPromise = (async () => {
       console.log('Starting fetchDataPromise');
 
-      let campaignDetails, verifyTipsResult;
+      const campaignDetails = await getCampaignDetails(campaign);
+      const data = campaignDetails;
 
-      if (hash) {
-        // If hash is available, run both processes in parallel
-        [campaignDetails, verifyTipsResult] = await Promise.all([
-          getCampaignDetails(campaign),
-          verifyTips(hash, campaignId)
-        ]);
-        console.log('Campaign details fetched and tips verified');
-      } else {
-        // If no hash, only fetch campaign details
-        campaignDetails = await getCampaignDetails(campaign);
-        console.log('Campaign details fetched');
+      const tipsValid = Number(ctx.message?.castId?.fid) == Number(data.fid_indi)
+
+      console.log(ctx.message?.castId)
+      console.log("tips:", tipsValid)
+
+      if (hash && tipsValid == true) {
+        verifyTips(hash, campaignId)
       }
 
-
-      console.log('Campaign details and tips verified, calculating progress');
-      const data = campaignDetails;
       const amount = inputText || data.goal_amt;
       const progress = await calculateProgress(amount, campaign);
 
@@ -209,7 +203,8 @@ const handleRequest = async (
                   alignItems: "center",
                   justifyContent: "center",
                   backgroundColor: "rgba(240, 240, 240, 0.2)",
-                  position: "relative"
+                  position: "relative",
+                  marginTop: "10px"
                 }}>
                   <div style={{
                     width: `${progressPercentage}`,
@@ -233,8 +228,21 @@ const handleRequest = async (
                       ${progress.amountCollected}
                     </span>
                   </div>
+
                 </div>
+                {tipsValid && (
+                  <span style={{
+                    fontSize: "12px",
+                    fontFamily: "'IntegralCF', sans-serif",
+                    fontWeight: "400",
+                    color: "white",
+                    marginTop: "30px"
+                  }} tw="font-bold">
+                    You can also Support with Degen Tips 👇
+                  </span>
+                )}
               </div>
+
             </div>
           </div>
         ),

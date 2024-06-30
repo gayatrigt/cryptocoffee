@@ -106,23 +106,17 @@ const handleRequest = async (
     const fetchDataPromise = (async () => {
       console.log('Starting fetchDataPromise');
 
-      let campaignDetails, verifyTipsResult;
 
-      if (hash) {
-        // If hash is available, run both processes in parallel
-        [campaignDetails, verifyTipsResult] = await Promise.all([
-          getCampaignDetails(campaign),
-          verifyTips(hash, campaignId)
-        ]);
-        console.log('Campaign details fetched and tips verified');
-      } else {
-        // If no hash, only fetch campaign details
-        campaignDetails = await getCampaignDetails(campaign);
-        console.log('Campaign details fetched');
+      const campaignDetails = await getCampaignDetails(campaign);
+
+      const data = campaignDetails;
+
+      const tipsValid = Number(ctx.message?.castId?.fid) == Number(data.lead_fid)
+
+      if (hash && tipsValid == true) {
+        verifyTips(hash, campaignId)
       }
 
-      console.log('Campaign details and tips verified, calculating progress');
-      const data = campaignDetails;
       const amount = inputText || data.goal_amt;
       const progress = await calculateProgress(amount, campaign);
       const progressPercentage = `${progress.percentageCompleted}%`;
@@ -225,6 +219,17 @@ const handleRequest = async (
                     </span>
                   </div>
                 </div>
+                {tipsValid && (
+                  <span style={{
+                    fontSize: "12px",
+                    fontFamily: "'IntegralCF', sans-serif",
+                    fontWeight: "400",
+                    color: "white",
+                    marginTop: "30px"
+                  }} tw="font-bold">
+                    You can also Support with Degen Tips 👇
+                  </span>
+                )}
               </div>
             </div>
           </div>
