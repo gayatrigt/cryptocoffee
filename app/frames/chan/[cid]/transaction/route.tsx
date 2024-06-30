@@ -5,15 +5,20 @@ import { createFrames, Button } from "frames.js/next";
 import { NextRequest } from "next/server";
 import { Channel } from "../../f/[camp]/route";
 import { env } from "process";
+import { loadFonts } from "@/app/utils/fontloader";
 
 export type State = {
   chain: string;
 };
 
+export const runtime = "edge";
+
 const handleRequest = async (
   req: NextRequest,
   { params: { cid: campaign } }: { params: { cid: string } }
 ) => {
+
+  const fonts = await loadFonts();
 
   return await frames(async (ctx) => {
     const data = await getCampaignDetails(campaign)
@@ -35,10 +40,77 @@ const handleRequest = async (
 
       return {
         image: (
-          <div tw="text-black w-full h-full justify-center items-center flex">
-            You just bought coffee for {data.channel_name}
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              width: "100%",
+              height: "100%",
+              position: "relative",
+            }}
+          >
+            <BgImage />
+            <div
+              style={{
+                position: "absolute",
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "center",
+                alignItems: "center",
+                gap: "4px",
+                padding: "20px",
+                textAlign: "center",
+              }}
+            >
+              <img
+                style={{
+                  objectFit: "cover",
+                  boxShadow: "0 4px 12px rgba(0, 0, 0, 0.2)",
+                }}
+                tw="h-20 w-20"
+                src={data.image_url}
+              />
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  flexDirection: "column",
+                  marginTop: "10px"
+                }}
+              >
+                <span style={{ fontSize: "30px", fontFamily: "'Inter', sans-serif" }} tw="font-normal text-white">
+                  You just bought BasedCoffee for
+                </span>
+                <span style={{ fontSize: "30px", fontFamily: "'Inter', sans-serif" }} tw="font-normal text-white">
+                  {data.channel_name}
+                </span>
+              </div>
+            </div>
           </div>
         ),
+        imageOptions: {
+          width: 650,
+          height: 356,
+          fonts: [
+            {
+              name: "Inter",
+              data: fonts.interRegular,
+              weight: 400,
+            },
+            {
+              name: "Inter",
+              data: fonts.interBold,
+              weight: 700,
+            },
+            {
+              name: "IntegralCF",
+              data: fonts.integralBold,
+              weight: 700,
+            },
+          ],
+        },
         buttons: [
           <Button
             action="link"
@@ -88,54 +160,104 @@ const handleRequest = async (
           style={{
             display: "flex",
             flexDirection: "column",
-            width: "70%",
             alignItems: "center",
             textAlign: "center",
+            justifyContent: "center",
           }}
         >
-          <div style={{
-            display: "flex",
-            flexDirection: "column",
-            justifyContent: "center",
-            alignItems: "center",
-            gap: "4px"
-          }}>
-
-            <div style={
-              {
+          <BgImage />
+          <div
+            style={{
+              position: "absolute",
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "center",
+              alignItems: "center",
+              gap: "4px",
+              padding: "20px",
+              textAlign: "center",
+            }}
+          >
+            <img
+              style={{
+                objectFit: "cover",
+                boxShadow: "0 4px 12px rgba(0, 0, 0, 0.2)",
+              }}
+              tw="h-20 w-20"
+              src={data.image_url}
+            />
+            <div
+              style={{
                 display: "flex",
                 justifyContent: "center",
                 alignItems: "center",
                 flexDirection: "column",
-              }
-            }>
-              <span style={
-                {
-                  fontSize: "30px"
-                }
-              } tw="font=bold" >
-                You are buying {selectedAmount} Coffee for {data.channel_name}
+                marginTop: "10px"
+              }}
+            >
+              <span style={{ fontSize: "25px", fontFamily: "'IntegralCF', sans-serif", fontWeight: "400", margin: "2px" }} tw="font-normal text-white">
+                You are buying {selectedAmount} Coffee/s for
               </span>
-              <span style={
-                {
-                  fontSize: "50px",
-                  marginTop: "30px"
-                }
-              } tw="font=bold" >
-                {displayAmt}
+              <span style={{ fontSize: "25px", fontFamily: "'IntegralCF', sans-serif", fontWeight: "400" }} tw="font-normal text-white">
+                {data.channel_name}
               </span>
-              <span style={
-                {
-                  fontSize: "30px",
-                  marginTop: "5px"
-                }
-              } tw="font=normal" >
-                (${usd})
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  marginTop: "10px"
+                }}
+              >
+                <span style={{ fontSize: "30px", fontFamily: "'IntegralCF', sans-serif", fontWeight: "700" }} tw="font-normal text-white">
+                  {displayAmt}
+                </span>
+                <img src={`${env.HOST_URL}/eth-logo.png`} alt="" tw="w-6 h-8 pb-2" style={{ display: "flex" }} />
+              </div>
+              <span style={{
+                fontSize: "16px",
+                fontFamily: "'IntegralCF', sans-serif",
+                fontWeight: "400",
+                width: "50px",
+                height: "20px",
+                backgroundColor: "#D98243",
+                color: "white",
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center"
+              }} tw="font-normal">
+                ~$ {usd}
               </span>
             </div>
           </div>
         </div>
       ),
+      imageOptions: {
+        width: 650,
+        height: 356,
+        fonts: [
+          {
+            name: "Inter",
+            data: fonts.interRegular,
+            weight: 400,
+          },
+          {
+            name: "Inter",
+            data: fonts.interBold,
+            weight: 700,
+          },
+          {
+            name: "IntegralCF",
+            data: fonts.integralBold,
+            weight: 700,
+          },
+          {
+            name: "IntegralCF",
+            data: fonts.integralRegular,
+            weight: 400,
+          },
+        ],
+      },
       buttons: [
         <Button action="tx" target={{
           pathname: `/chan/txdata`, query: { amount: coffee, wallet: wallet, chain: chain }
@@ -147,6 +269,10 @@ const handleRequest = async (
     };
   })(req)
 };
+
+function BgImage({ width = '100%', tw }: { width?: string; tw?: string }) {
+  return <img src={`${env.HOST_URL}/bgall.png`} alt="background" width={width} tw={tw} />;
+}
 
 export const GET = handleRequest;
 export const POST = handleRequest;
