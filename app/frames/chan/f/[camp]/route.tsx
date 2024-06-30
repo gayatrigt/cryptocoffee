@@ -2,8 +2,7 @@ import { supabase } from "@/app/lib/supabaseClient";
 import { loadFonts } from "@/app/utils/fontloader";
 import { frames } from "@/app/utils/frames";
 import { cache } from "@/app/utils/kvclient";
-import { farcasterHubContext } from "frames.js/middleware";
-import { createFrames, Button } from "frames.js/next";
+import { Button } from "frames.js/next";
 import { NextRequest } from "next/server";
 import { env } from "process";
 
@@ -306,7 +305,7 @@ async function getCampaignDetails(campaignId: string): Promise<Channel> {
     }
 
     if (!data) {
-      throw new Error('Campaign not found');
+      throw new Error(`Campaign not found, expected data for id: ${campaignId}`);
     }
 
     // Cache the result before returning
