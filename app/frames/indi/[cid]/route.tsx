@@ -16,7 +16,7 @@ const handleRequest = async (
   return await frames(async (ctx) => {
 
     const chainLabel = "ETH"
-    const amount = "0.0001"
+    const amount = "0.0015"
 
     return {
       image: (

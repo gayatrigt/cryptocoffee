@@ -18,7 +18,6 @@ export interface Channel {
   parent_url: string;
   lead_fid: number;
   eth_address: string;
-  campaign_id: string;
   campaign_name: string;
   goal_amt: number;
   goal_reached: Record<string, unknown>;
@@ -39,13 +38,12 @@ const handleRequest = async (
     const inputText = ctx.message?.inputText;
     const hash = ctx.message?.castId?.hash
 
-
     if (inputText) {
       console.log(`Updating goal amount to: ${inputText}`);
       const updateResponse = await supabase
         .from('channels')
         .update({ goal_amt: parseFloat(inputText) })
-        .eq('campaign_id', campaign);
+        .eq('id', campaign);
 
       if (updateResponse.error) {
         throw updateResponse.error;
@@ -297,7 +295,7 @@ async function getCampaignDetails(campaignId: string): Promise<Channel> {
     const { data, error } = await supabase
       .from('channels')
       .select('*')
-      .eq('campaign_id', campaignId)
+      .eq('id', campaignId)
       .single(); // Use .single() to get a single object instead of an array
 
     if (error) {

@@ -1,17 +1,22 @@
+import { loadFonts } from "@/app/utils/fontloader";
 import { frames } from "@/app/utils/frames";
 import { farcasterHubContext } from "frames.js/middleware";
 import { createFrames, Button } from "frames.js/next";
 import { NextRequest } from "next/server";
+import { env } from "process";
 
 export type State = {
   chain: string;
 };
 
+export const runtime = "edge";
 
 const handleRequest = async (
   req: NextRequest,
   { params: { fid: routeFid } }: { params: { fid: string } }
 ) => {
+
+  const fonts = await loadFonts();
 
   return await frames(async (ctx) => {
     const response = await fetch(`https://cryptocoffee-opal.vercel.app/api/user-details?fid=${routeFid}`);
@@ -21,10 +26,73 @@ const handleRequest = async (
 
       return {
         image: (
-          <div tw="text-black w-full h-full justify-center items-center flex">
-            You just bought coffee for {data.users[0].display_name}
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              textAlign: "center",
+              justifyContent: "center",
+            }}
+          >
+            <BgImage />
+            <div style={{
+              position: "absolute",
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "center",
+              alignItems: "center",
+              gap: "4px",
+              padding: "20px",
+              textAlign: "center",
+            }}>
+              <span style={
+                {
+                  fontSize: "25px",
+                  fontFamily: "'IntegralCF', sans-serif",
+                  fontWeight: "400", margin: "2px"
+                }
+              } tw="font-normal text-white" >
+                You just bought coffee for
+              </span>
+              <span style={
+                {
+                  fontSize: "25px",
+                  fontFamily: "'IntegralCF', sans-serif",
+                  fontWeight: "400", margin: "2px"
+                }
+              } tw="font-normal text-white" >
+                {data.users[0].display_name}
+              </span>
+            </div>
           </div>
         ),
+        imageOptions: {
+          width: 650,
+          height: 356,
+          fonts: [
+            {
+              name: "Inter",
+              data: fonts.interRegular,
+              weight: 400,
+            },
+            {
+              name: "Inter",
+              data: fonts.interBold,
+              weight: 700,
+            },
+            {
+              name: "IntegralCF",
+              data: fonts.integralBold,
+              weight: 700,
+            },
+            {
+              name: "IntegralCF",
+              data: fonts.integralRegular,
+              weight: 400,
+            },
+          ],
+        },
         buttons: [
           <Button
             action="link"
@@ -71,54 +139,110 @@ const handleRequest = async (
           style={{
             display: "flex",
             flexDirection: "column",
-            width: "70%",
             alignItems: "center",
             textAlign: "center",
+            justifyContent: "center",
           }}
         >
+          <BgImage />
           <div style={{
+            position: "absolute",
             display: "flex",
             flexDirection: "column",
             justifyContent: "center",
             alignItems: "center",
-            gap: "4px"
+            gap: "4px",
+            padding: "20px",
+            textAlign: "center",
           }}>
-
             <div style={
               {
                 display: "flex",
                 justifyContent: "center",
                 alignItems: "center",
                 flexDirection: "column",
+                marginTop: "10px"
               }
             }>
               <span style={
                 {
-                  fontSize: "30px"
+                  fontSize: "25px",
+                  fontFamily: "'IntegralCF', sans-serif",
+                  fontWeight: "400", margin: "2px"
                 }
-              } tw="font=bold" >
-                You are buying {selectedAmount} Coffee for {data.users[0].display_name}
+              } tw="font-normal text-white" >
+                You are buying {selectedAmount} Coffee for
+
               </span>
               <span style={
                 {
-                  fontSize: "50px",
-                  marginTop: "30px"
+                  fontSize: "25px",
+                  fontFamily: "'IntegralCF', sans-serif",
+                  fontWeight: "400", margin: "2px"
                 }
-              } tw="font=bold" >
-                {displayAmt}
+              } tw="font-normal text-white" >
+
+                {data.users[0].display_name}
               </span>
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  marginTop: "10px"
+                }}
+              >
+                <span style={{ fontSize: "30px", fontFamily: "'IntegralCF', sans-serif", fontWeight: "700" }} tw="font-normal text-white">
+
+                  {displayAmt}
+                </span>
+              </div>
               <span style={
                 {
-                  fontSize: "30px",
-                  marginTop: "5px"
+                  fontSize: "16px",
+                  fontFamily: "'IntegralCF', sans-serif",
+                  fontWeight: "400",
+                  width: "50px",
+                  height: "20px",
+                  backgroundColor: "#D98243",
+                  color: "white",
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center"
                 }
               } tw="font=normal" >
-                (${usd})
+                ~${usd}
               </span>
             </div>
           </div>
         </div>
       ),
+      imageOptions: {
+        width: 650,
+        height: 356,
+        fonts: [
+          {
+            name: "Inter",
+            data: fonts.interRegular,
+            weight: 400,
+          },
+          {
+            name: "Inter",
+            data: fonts.interBold,
+            weight: 700,
+          },
+          {
+            name: "IntegralCF",
+            data: fonts.integralBold,
+            weight: 700,
+          },
+          {
+            name: "IntegralCF",
+            data: fonts.integralRegular,
+            weight: 400,
+          },
+        ],
+      },
       buttons: [
         <Button action="tx" target={{
           pathname: `/builder/txdata`, query: { amount: coffee, wallet: wallet, chain: chain }
@@ -130,6 +254,10 @@ const handleRequest = async (
     };
   })(req)
 };
+
+function BgImage({ width = '100%', tw }: { width?: string; tw?: string }) {
+  return <img src={`${env.HOST_URL}/bgall.png`} alt="background" width={width} tw={tw} />;
+}
 
 export const GET = handleRequest;
 export const POST = handleRequest;

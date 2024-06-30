@@ -51,7 +51,7 @@ const handleRequest = async (
       const updateResponse = await supabase
         .from('channels')
         .update({ goal_amt: parseFloat(inputText) })
-        .eq('campaign_id', campaign);
+        .eq('id', campaign);
 
       if (updateResponse.error) {
         throw updateResponse.error;
@@ -304,7 +304,7 @@ async function getCampaignDetails(campaignId: string): Promise<Channel> {
     const { data, error } = await supabase
       .from('channels')
       .select('*')
-      .eq('campaign_id', campaignId)
+      .eq('id', campaignId)
       .single();
 
     if (error) {

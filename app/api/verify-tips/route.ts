@@ -104,7 +104,7 @@ async function processNeynarData(hash: string, campaign_id: string, cursor: stri
         const existingHashes = new Set((await supabase
             .from('Transactions')
             .select('degen_hash')
-            .eq('campaign_id', campaign_id)
+            .eq('id', campaign_id)
             .in('degen_hash', replies.map(reply => reply.hash))).data?.map(d => d.degen_hash) || []);
 
         const tipPromises = replies

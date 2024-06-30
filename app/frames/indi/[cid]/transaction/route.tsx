@@ -150,7 +150,7 @@ const handleRequest = async (
     const fromFid = ctx.message && ctx.message.requesterFid
     const fromWallet = ctx.message && ctx.message.requesterVerifiedAddresses
 
-    const coffee = parseFloat((selectedAmount * 0.0001).toFixed(4))
+    const coffee = parseFloat((selectedAmount * 0.0015).toFixed(4))
     const displayAmt = coffee + " ETH"
 
     const usd = selectedAmount * 5.5

@@ -145,7 +145,7 @@ const handleRequest = async (
     const fromFid = ctx.message && ctx.message.requesterFid
     const fromWallet = ctx.message && ctx.message.requesterVerifiedAddresses
 
-    const coffee = parseFloat((selectedAmount * 0.0001).toFixed(4))
+    const coffee = parseFloat((selectedAmount * 0.0015).toFixed(4))
     const displayAmt = coffee + " ETH"
 
 
@@ -195,7 +195,12 @@ const handleRequest = async (
                 marginTop: "10px"
               }}
             >
-              <span style={{ fontSize: "25px", fontFamily: "'IntegralCF', sans-serif", fontWeight: "400", margin: "2px" }} tw="font-normal text-white">
+              <span style={{
+                fontSize: "25px",
+                fontFamily: "'IntegralCF', sans-serif",
+                fontWeight: "400", margin: "2px"
+              }}
+                tw="font-normal text-white">
                 You are buying {selectedAmount} Coffee/s for
               </span>
               <span style={{ fontSize: "25px", fontFamily: "'IntegralCF', sans-serif", fontWeight: "400" }} tw="font-normal text-white">

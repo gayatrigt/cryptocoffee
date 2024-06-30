@@ -2,6 +2,7 @@ import { frames } from "@/app/utils/frames";
 import { farcasterHubContext } from "frames.js/middleware";
 import { createFrames, Button } from "frames.js/next";
 import { NextRequest } from "next/server";
+import { env } from "process";
 
 export type State = {
   chain: string;
@@ -18,10 +19,12 @@ const handleRequest = async (
 
     let chainLabel = "ETH"
     let amount = "0.0015"
+    let BgImageComponent = BgImage2
 
     if (chain == "degen") {
       chainLabel = "DEGEN"
       amount = "300"
+      BgImageComponent = BgImage1
     }
 
     return {
@@ -29,52 +32,20 @@ const handleRequest = async (
         <div
           style={{
             display: "flex",
-            flexDirection: "column",
-            width: "70%",
             alignItems: "center",
-            textAlign: "center",
+            justifyContent: "center",
+            width: "100%",
+            height: "100%",
+            position: "relative",
           }}
         >
-          <div style={{
-            display: "flex",
-            flexDirection: "column",
-            justifyContent: "center",
-            alignItems: "center",
-            gap: "4px"
-          }}>
-
-            <div style={
-              {
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-                flexDirection: "column",
-              }
-            }>
-              <span style={
-                {
-                  fontSize: "40px"
-                }
-              } tw="font=bold" > 1 Coffee = {amount} {chainLabel}
-              </span>
-              <span style={
-                {
-                  fontSize: "20px"
-                }
-              } tw="font=light" > (~ $5.5)
-              </span>
-              <span style={
-                {
-                  fontSize: "30px",
-                  marginTop: "30px"
-                }
-              } tw="font=normal" >
-                How many coffee you want to buy?
-              </span>
-            </div>
-          </div>
+          <BgImageComponent />
         </div>
       ),
+      imageOptions: {
+        width: 650,
+        height: 356,
+      },
       textInput: ctx.url.searchParams.has("custom") ? "How many cups of coffee?" : undefined,
       buttons: !ctx.url.searchParams.has("custom")
         ? [
@@ -122,6 +93,14 @@ const handleRequest = async (
     };
   })(req)
 };
+
+function BgImage1({ width = '100%', tw }: { width?: string; tw?: string }) {
+  return <img src={`${env.HOST_URL}/degen.png`} alt="background" width={width} tw={tw} />;
+}
+
+function BgImage2({ width = '100%', tw }: { width?: string; tw?: string }) {
+  return <img src={`${env.HOST_URL}/price.png`} alt="background" width={width} tw={tw} />;
+}
 
 export const GET = handleRequest;
 export const POST = handleRequest;
