@@ -341,7 +341,7 @@ async function fetchTransactions(campaignId: string) {
   const { data, error } = await supabase
     .from('Transactions')
     .select('amt_usd')
-    .eq('campaign_id', campaignId);
+    .eq('id', campaignId);
 
   if (error) {
     console.error('Error fetching transactions for campaign ID', campaignId, ':', error);

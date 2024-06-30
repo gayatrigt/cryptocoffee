@@ -288,7 +288,7 @@ async function getCampaignDetails(campaignId: string): Promise<Channel> {
     const { data, error } = await supabase
       .from('channels')
       .select('*')
-      .eq('campaign_id', campaignId)
+      .eq('id', campaignId)
       .single(); // Use .single() to get a single object instead of an array
 
     if (error) {
