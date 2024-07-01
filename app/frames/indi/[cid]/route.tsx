@@ -63,7 +63,7 @@ const handleRequest = async (
             5
           </Button >,
           <Button action="post" target={{
-            pathname: `/channel/${campaign}`,
+            pathname: `/indi/${campaign}`,
             query: { custom: true }
           }}>
             Custom

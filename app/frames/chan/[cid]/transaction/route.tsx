@@ -220,7 +220,7 @@ const handleRequest = async (
                 <img src={`${env.HOST_URL}/eth-logo.png`} alt="" tw="w-6 h-8 pb-2" style={{ display: "flex" }} />
               </div>
               <span style={{
-                fontSize: "16px",
+                fontSize: "12px",
                 fontFamily: "'IntegralCF', sans-serif",
                 fontWeight: "400",
                 width: "50px",
