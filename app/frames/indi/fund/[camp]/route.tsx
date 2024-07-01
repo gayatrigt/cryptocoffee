@@ -177,7 +177,7 @@ const handleRequest = async (
                     Support {data.indi_name}
                   </span>
                   <span style={{
-                    fontSize: "30px",
+                    fontSize: "20px",
                     marginTop: "20px",
                     fontFamily: "'IntegralCF', sans-serif",
                     color: "white",
