@@ -269,6 +269,9 @@ const handleRequest = async (
         }} post_url={`/chan/${campaign}/transaction`}>
           Buy Coffee
         </Button>,
+        <Button action="post" target={`/chan/f/${campaign}`}>
+          Go back
+        </Button>,
       ]
       ,
     };

@@ -268,7 +268,7 @@ const handleRequest = async (
             Support
           </Button>,
           <Button action='link'
-            key={"share"} target={`https://warpcast.com/~/compose?embeds[]=https://cryptocoffee-opal.vercel.app/frames/channel/fund/${campaign}`}>
+            key={"share"} target={`https://warpcast.com/~/compose?embeds[]=https://cryptocoffee-opal.vercel.app/frames/chan/f/${campaign}`}>
             Share Frame
           </Button>
         ],
@@ -324,7 +324,7 @@ async function getCampaignDetails(campaignId: string): Promise<Channel> {
 async function calculateProgress(goal: any, campaignId: string) {
   try {
     const { data, error } = await supabase
-      .rpc('sum_transactions', { campaign_id: campaignId });
+      .rpc('sum_transactions', { campaign_id: campaignId });  // Fetch sum of transactions where txn_hash is not null
 
     if (error) {
       console.error('Error fetching transactions sum for campaign ID', campaignId, ':', error);

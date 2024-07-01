@@ -26,6 +26,8 @@ const handleRequest = async (
 
     if (ctx.message?.transactionId) {
 
+      console.log("ctx:", ctx.message)
+
       const txnHash = ctx.message.transactionId
 
       if (txnHash) {
