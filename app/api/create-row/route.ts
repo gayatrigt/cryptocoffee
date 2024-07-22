@@ -1,26 +1,32 @@
 import { Channel } from '@/app/frames/indi/fund/[camp]/route';
 import { supabase } from '@/app/lib/supabaseClient';
-import type { NextApiRequest, NextApiResponse } from 'next';
 import { env } from 'process';
+import { NextRequest, NextResponse } from 'next/server';
 
-export async function handler(req: NextApiRequest, res: NextApiResponse) {
-    if (req.method !== 'POST') {
-        return res.status(405).json({ message: 'Method Not Allowed' });
-    }
-
+export async function POST(request: NextRequest) {
     try {
-        const { goal, fid, goalamt } = req.body;
+        const body = await request.json();
+        const { goal, fid, goalamt } = body;
 
         if (!goal || !fid || !goalamt) {
-            return res.status(400).json({ message: 'Missing required fields' });
+            return NextResponse.json(
+                { message: 'Missing required fields' },
+                { status: 400 }
+            );
         }
 
         const channel = await createChannelRow(goal, parseInt(fid), parseFloat(goalamt));
 
-        res.status(200).json({ message: 'Channel created successfully', channel });
+        return NextResponse.json(
+            { message: 'Channel created successfully', channel },
+            { status: 200 }
+        );
     } catch (error) {
         console.error('Error in API route:', error);
-        res.status(500).json({ message: 'Internal Server Error', error: (error as Error).message });
+        return NextResponse.json(
+            { message: 'Internal Server Error', error: (error as Error).message },
+            { status: 500 }
+        );
     }
 }
 
