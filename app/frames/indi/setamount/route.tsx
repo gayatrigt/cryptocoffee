@@ -68,7 +68,7 @@ const createChannelRow = async (goal: string | undefined, fid: any): Promise<Cha
       throw testError;
     }
 
-    // Fetch channel details from API
+    // Fetch user details from API
     const response = await fetch(`${env.HOST_URL}/api/user-details?fid=${fid}`);
     if (!response.ok) {
       throw new Error(`API request failed with status ${response.status}`);

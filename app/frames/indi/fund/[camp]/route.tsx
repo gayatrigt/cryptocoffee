@@ -285,7 +285,9 @@ const handleRequest = async (
           </Button>
         ],
       };
-    })();
+    }
+
+    )();
     return Promise.race([timeoutPromise, fetchDataPromise]);
   })(req);
 };
